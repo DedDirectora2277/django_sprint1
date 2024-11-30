@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import render
 
 
@@ -46,6 +47,7 @@ posts = [
 
 posts_dict = {post['id']: post for post in posts}
 
+
 def index(request):
     template_name = 'blog/index.html'
     context = {'posts': posts[::-1]}
@@ -56,7 +58,7 @@ def post_detail(request, post_id):
     template_name = 'blog/detail.html'
     post_details = posts_dict.get(post_id)
     if post_details is None:
-        raise ValueError('Non-existent identifier')
+        raise Http404(f'Post with id {post_id} doesn\'t exist')
     context = {'post': post_details}
     return render(request, template_name, context)
 
